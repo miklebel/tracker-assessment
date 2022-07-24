@@ -2,11 +2,29 @@
   <head>
     <title>Demo page</title>
     <script>
+      //"Асинхронно" и виртуозно загружаем скрипт
+      //продолжая парсить страницу и загружать и выполнять все остальное.
       const script = document.createElement("script");
       const head = document.head || document.getElementsByTagName("head")[0];
-      scr.src = "http://localhost:8001/";
-      scr.async = false;
-      head.insertBefore(scr, head.firstChild);
+      script.src = "http://localhost:8001/";
+      script.async = false;
+      head.insertBefore(script, head.firstChild);
+
+      //Времеено подменяем до загрузки основного скрипта публичный метод функцией,
+      //которая пихает ивенты в глобальную переменную, чтобы не потерять нашу "precious data".
+      window.tracker = {
+        track: (event, ...tags) => {
+          const track = {
+            event,
+            tags,
+            url: document.location.href,
+            title: document.title,
+            ts: new Date(),
+          };
+          if (window.prebuffer) window.prebuffer.push(track);
+          else window.prebuffer = [track];
+        },
+      };
     </script>
     <script>
       tracker.track("pageview");

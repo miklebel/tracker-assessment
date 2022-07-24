@@ -9,7 +9,7 @@
     "build": "tsc -p ./tsconfig.json",
     "start:static": "node ./dist/static-server/index.js",
     "start:tracker": "node ./dist/tracker-server/index.js",
-    "start:static:dev": "nodemon --watch src/static-server -e ts --exec \"ts-node --transpile-only  --project ./tsconfig.json ./src/static-server/index.ts\"",
+    "start:static:dev": "nodemon --watch src/static-server -e ts,html --exec \"ts-node --transpile-only  --project ./tsconfig.json ./src/static-server/index.ts\"",
     "start:tracker:dev": "nodemon --watch src/tracker-server -e ts,js --exec \"ts-node --transpile-only  --project ./tsconfig.json ./src/tracker-server/index.ts\""
   },
   "dependencies": {

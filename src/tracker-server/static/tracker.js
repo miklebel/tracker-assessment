@@ -3,6 +3,9 @@ class Tracker {
 
   sync() {
     const tracker = this;
+    if (window.prebuffer) {
+      window.prebuffer.forEach((t) => tracker.#saveTrack(t));
+    }
     setInterval(() => {
       tracker.#sendTracks();
     }, 1000);
@@ -60,5 +63,5 @@ class Tracker {
   }
 }
 
-const tracker = new Tracker();
+window.tracker = new Tracker();
 tracker.sync();
