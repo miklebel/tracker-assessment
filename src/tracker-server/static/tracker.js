@@ -1,6 +1,8 @@
 class Tracker {
   constructor() {}
 
+  #trackerUrl = "http://localhost:8001/track";
+
   sync() {
     const tracker = this;
     if (window.prebuffer) {
@@ -9,8 +11,11 @@ class Tracker {
     setInterval(() => {
       tracker.#sendTracks();
     }, 1000);
+    addEventListener("beforeunload", () => this.#sendTracks(true));
   }
 
+  // Изначально решил делать буфер в sessionStorage.
+  // Со слушателем ухода метод необязателен, но может вам будет интересно изначальное решение.
   #getBuffer() {
     const bufferString = sessionStorage.getItem("buffer");
     return bufferString
@@ -37,9 +42,13 @@ class Tracker {
 
   async #sendTracks(isExit) {
     const buffer = this.#getBuffer();
-    if (buffer.tracks.length > 3 || isExit) {
+    if (isExit && buffer.tracks.length > 0) {
+      console.log(isExit);
+      navigator.sendBeacon(this.#trackerUrl, JSON.stringify(buffer));
+      this.#cleanBuffer();
+    } else if (buffer.tracks.length >= 3) {
       try {
-        const result = await fetch("http://localhost:8001/track", {
+        const result = await fetch(this.#trackerUrl, {
           method: "POST",
           "Content-Type": "application/json; charset=utf-8",
           body: JSON.stringify(buffer),
