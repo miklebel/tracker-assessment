@@ -8,13 +8,12 @@ import { AppDataSource } from "./repo/TrackRepository";
 
 const main = async () => {
   const repo = await AppDataSource.initialize();
+  console.log('Connected to MongoDB server.')
 
   const app = express();
   const port = process.env.PORT || 8001;
   app.use(cors({ origin: "*" }));
   app.use(express.static(__dirname + "/public"));
-
-  app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json({ type: ["application/json", "text/plain"] }));
 
   app.get("/", (req, res) => {
