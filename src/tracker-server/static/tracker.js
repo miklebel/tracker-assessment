@@ -43,7 +43,6 @@ class Tracker {
   async #sendTracks(isExit) {
     const buffer = this.#getBuffer();
     if (isExit && buffer.tracks.length > 0) {
-      console.log(isExit);
       navigator.sendBeacon(this.#trackerUrl, JSON.stringify(buffer));
       this.#cleanBuffer();
     } else if (buffer.tracks.length >= 3) {
